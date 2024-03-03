@@ -1,0 +1,34 @@
+<table class="b-table">
+    <tr class="b-table__row b-table__row_head">
+        <td class="b-table__col b-table__col_head">
+            <div class="btn btn_micro" onclick="ShowEmployeeStatesFilter();return false;">
+                <span id="employeeStatesFilterButton" class="box_arrow">&#9662;</span>
+            </div>
+        </td>
+        <td class="b-table__col b-table__col_head">
+            ФИО&nbsp;
+
+            <a class="sorter" onclick="SortByName();">
+                <img src="/Content/OfficeManager/img/personal/sortdown.png" alt="sorter" width="11" height="14"/>
+            </a>
+        </td>
+        <td class="b-table__col b-table__col_head">
+            <span class="capitalize-text">телефон</span>
+        </td>
+        <td class="b-table__col b-table__col_head">
+            Тип
+            <div class="btn btn_micro" onclick="ShowEmployeeTypesFilter();return false;">
+                <span id="employeeTypesFilterButton" class="box_arrow">&#9662;</span>
+            </div>
+        </td>
+        <td class="b-table__col b-table__col_head">
+            Стаж
+            <div class="btn btn_micro" onclick="ShowEmployeeExperiencesFilter();return false;">
+                <span id="employeeExperiencesFilterButton" class="box_arrow">&#9662;</span>
+            </div>
+            <a class="sorter" onclick="SortByExperience();">
+                <img src="/Content/OfficeManager/img/personal/sortno.png" alt="sorter" width="11" height="14"/>
+            </a>
+        </td>
+    </tr>
+</table>

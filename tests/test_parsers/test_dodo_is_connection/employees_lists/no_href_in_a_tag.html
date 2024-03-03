@@ -1,0 +1,72 @@
+<table class="b-table">
+    <tr class="b-table__row b-table__row_head">
+        <td class="b-table__col b-table__col_head">
+            <div class="btn btn_micro" onclick="ShowEmployeeStatesFilter();return false;">
+                <span id="employeeStatesFilterButton" class="box_arrow">&#9662;</span>
+            </div>
+        </td>
+        <td class="b-table__col b-table__col_head">
+            ФИО&nbsp;
+
+            <a class="sorter" onclick="SortByName();">
+                <img src="/Content/OfficeManager/img/personal/sortdown.png" alt="sorter" width="11" height="14"/>
+            </a>
+        </td>
+        <td class="b-table__col b-table__col_head">
+            <span class="capitalize-text">телефон</span>
+        </td>
+        <td class="b-table__col b-table__col_head">
+            Тип
+            <div class="btn btn_micro" onclick="ShowEmployeeTypesFilter();return false;">
+                <span id="employeeTypesFilterButton" class="box_arrow">&#9662;</span>
+            </div>
+        </td>
+        <td class="b-table__col b-table__col_head">
+            Стаж
+            <div class="btn btn_micro" onclick="ShowEmployeeExperiencesFilter();return false;">
+                <span id="employeeExperiencesFilterButton" class="box_arrow">&#9662;</span>
+            </div>
+            <a class="sorter" onclick="SortByExperience();">
+                <img src="/Content/OfficeManager/img/personal/sortno.png" alt="sorter" width="11" height="14"/>
+            </a>
+        </td>
+    </tr>
+    <tr class="b-table__row info_arrow"
+        onclick="document.location = '/OfficeManager/EmployeeEdit/EditEmployee?employeeId=202992';">
+        <td class="b-table__col">
+            <span class="circle circle-green">&nbsp;</span>
+        </td>
+        <td class="b-table__col">
+            <a>
+                Волошин Павел Николаевич
+            </a>
+
+            <span class="table1_add">
+							<br/>
+родился							четверг, 3 марта 1988 г.
+						</span>
+            <div class="table1_status">
+                статус: <span class="green">работает</span>
+                <span class="green">
+							</span>
+                <br/>
+                мед. книжка: <span class="green">до пятница, 14 июня 2024 г.</span>
+            </div>
+            <div class="table1_info">
+                пиццерия: <span>Москва 4-15</span><br/>
+                телефон: <span>&#x2B;7 (968) 358-08-18</span>
+            </div>
+        </td>
+        <td class="b-table__col">
+            <span>&#x2B;7 (968) 358-08-18</span>
+        </td>
+        <td class="b-table__col">Работник кухни<span class="table1_add"><br/>Менеджер</span></td>
+        <td class="b-table__col">
+            <div class="table1_unitWrap">
+                1 год
+                8 мес.
+                16 дней
+            </div>
+        </td>
+    </tr>
+</table>
