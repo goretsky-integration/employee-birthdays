@@ -2,7 +2,11 @@ import httpx
 
 from pydantic import BaseModel, TypeAdapter
 
-__all__ = ('HttpResponseJsonParseError', 'ResponseDataParseError')
+__all__ = (
+    'HttpResponseJsonParseError',
+    'ResponseDataParseError',
+    'EmployeeBirthdaysParseError',
+)
 
 
 class HttpResponseJsonParseError(Exception):
@@ -28,3 +32,10 @@ class ResponseDataParseError(Exception):
         return (
             f'Failed to parse {self.response_data} to {self.type_to_parse}'
         )
+
+
+class EmployeeBirthdaysParseError(Exception):
+
+    def __init__(self, *args, html: str):
+        super().__init__(*args)
+        self.html = html
