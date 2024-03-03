@@ -21,12 +21,15 @@ class DodoISConnection:
         self.__http_client = http_client
         self.__cookies = cookies
 
-    def iter_employee_birthdays(self) -> Generator[HTML, bool, None]:
+    def iter_employee_birthdays(
+            self,
+            unit_id: int,
+    ) -> Generator[HTML, None, None]:
         url = '/OfficeManager/EmployeeList/EmployeeBirthdaysPartial'
         page = 1
 
         while True:
-            request_query_params = {'page': page}
+            request_query_params = {'page': page, 'unitId': unit_id}
 
             with bound_contextvars(request_query_params=request_query_params):
                 log.debug('Fetching employee birthdays: sending request')
