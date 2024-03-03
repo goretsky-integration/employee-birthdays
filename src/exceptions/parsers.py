@@ -6,7 +6,6 @@ __all__ = (
     'HttpResponseJsonParseError',
     'ResponseDataParseError',
     'EmployeeBirthdaysParseError',
-    'EmployeesListParseError',
 )
 
 
@@ -36,13 +35,6 @@ class ResponseDataParseError(Exception):
 
 
 class EmployeeBirthdaysParseError(Exception):
-
-    def __init__(self, *args, html: str):
-        super().__init__(*args)
-        self.html = html
-
-
-class EmployeesListParseError(Exception):
 
     def __init__(self, *args, html: str):
         super().__init__(*args)

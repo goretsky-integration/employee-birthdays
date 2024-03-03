@@ -46,22 +46,3 @@ class DodoISConnection:
                 yield HTML(response.text)
 
             page += 1
-
-    def search_employees(self, name: str) -> HTML:
-        url = '/OfficeManager/EmployeeList/StaffListPartial'
-
-        request_data = {'employeeName': name}
-
-        with bound_contextvars(request_data=request_data):
-            log.debug('Searching employees: sending request')
-            response = self.__http_client.post(
-                url=url,
-                data=request_data,
-                cookies=self.__cookies,
-            )
-            log.debug(
-                'Searching employees: received response',
-                status=response.status_code,
-            )
-
-            return HTML(response.text)
