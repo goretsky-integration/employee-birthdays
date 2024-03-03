@@ -12,14 +12,16 @@ log = structlog.stdlib.get_logger('app')
 
 class DodoISConnection:
 
-    def __init__(self, http_client: DodoISConnectionHttpClient):
-        self.__http_client = http_client
-
-    def iter_employee_birthdays(
+    def __init__(
             self,
             *,
+            http_client: DodoISConnectionHttpClient,
             cookies: dict[str, str],
-    ) -> Generator[HTML, bool, None]:
+    ):
+        self.__http_client = http_client
+        self.__cookies = cookies
+
+    def iter_employee_birthdays(self) -> Generator[HTML, bool, None]:
         url = '/OfficeManager/EmployeeList/EmployeeBirthdaysPartial'
         page = 1
 
@@ -31,7 +33,7 @@ class DodoISConnection:
                 response = self.__http_client.get(
                     url=url,
                     params=request_query_params,
-                    cookies=cookies,
+                    cookies=self.__cookies,
                 )
                 log.debug(
                     'Fetching employee birthdays: received response',
@@ -42,7 +44,7 @@ class DodoISConnection:
 
             page += 1
 
-    def search_employees(self, name: str, cookies: dict[str, str]) -> HTML:
+    def search_employees(self, name: str) -> HTML:
         url = '/OfficeManager/EmployeeList/StaffListPartial'
 
         request_data = {'employeeName': name}
@@ -52,7 +54,7 @@ class DodoISConnection:
             response = self.__http_client.post(
                 url=url,
                 data=request_data,
-                cookies=cookies,
+                cookies=self.__cookies,
             )
             log.debug(
                 'Searching employees: received response',
