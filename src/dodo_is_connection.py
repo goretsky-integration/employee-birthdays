@@ -19,7 +19,7 @@ class DodoISConnection:
             self,
             *,
             cookies: dict[str, str],
-    ) -> Generator[HTML, None, None]:
+    ) -> Generator[HTML, bool, None]:
         url = '/OfficeManager/EmployeeList/EmployeeBirthdaysPartial'
         page = 1
 
@@ -27,7 +27,6 @@ class DodoISConnection:
             request_query_params = {'page': page}
 
             with bound_contextvars(request_query_params=request_query_params):
-
                 log.debug('Fetching employee birthdays: sending request')
                 response = self.__http_client.get(
                     url=url,
@@ -39,9 +38,25 @@ class DodoISConnection:
                     status=response.status_code,
                 )
 
-                is_end = yield response.text
-
-            if is_end:
-                break
+                yield HTML(response.text)
 
             page += 1
+
+    def search_employees(self, name: str, cookies: dict[str, str]) -> HTML:
+        url = '/OfficeManager/EmployeeList/StaffListPartial'
+
+        request_data = {'employeeName': name}
+
+        with bound_contextvars(request_data=request_data):
+            log.debug('Searching employees: sending request')
+            response = self.__http_client.post(
+                url=url,
+                data=request_data,
+                cookies=cookies,
+            )
+            log.debug(
+                'Searching employees: received response',
+                status=response.status_code,
+            )
+
+            return HTML(response.text)
