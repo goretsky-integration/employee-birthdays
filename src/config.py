@@ -1,7 +1,7 @@
 import pathlib
 import tomllib
 
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, HttpUrl, AnyUrl
 
 from enums.country_codes import CountryCode
 
@@ -13,6 +13,7 @@ class Config(BaseModel):
     units_storage_base_url: HttpUrl
     country_code: CountryCode
     employees_blacklist: set[str]
+    message_queue_url: AnyUrl
 
 
 def load_config_from_file(file_path: pathlib.Path) -> Config:
@@ -26,4 +27,5 @@ def load_config_from_file(file_path: pathlib.Path) -> Config:
         units_storage_base_url=config['api']['units_storage_base_url'],
         country_code=CountryCode(config['country_code']),
         employees_blacklist=config['employees']['blacklist'],
+        message_queue_url=config['message_queue']['url'],
     )
