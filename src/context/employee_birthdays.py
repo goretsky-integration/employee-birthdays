@@ -7,7 +7,7 @@ from parsers.dodo_is_connection import parse_employee_birthdays_html
 __all__ = (
     'get_unit_employee_birthdays',
     'get_employee_birthdays',
-    'filter_unit_birthdays_by_employees',
+    'filter_units_birthdays_by_employees',
     'filter_employee_birthdays',
 )
 
@@ -24,9 +24,9 @@ def filter_employee_birthdays(
     ]
 
 
-def filter_unit_birthdays_by_employees(
+def filter_units_birthdays_by_employees(
         *,
-        unit_employee_birthdays: Iterable[UnitEmployeeBirthdays],
+        units_employee_birthdays: Iterable[UnitEmployeeBirthdays],
         employees_blacklist: Iterable[str],
 ) -> list[UnitEmployeeBirthdays]:
     employees_blacklist = set(employees_blacklist)
@@ -36,7 +36,7 @@ def filter_unit_birthdays_by_employees(
             unit_id=unit_employee_birthdays.unit_id,
             employee_birthdays=employee_birthdays,
         )
-        for unit_employee_birthdays in unit_employee_birthdays
+        for unit_employee_birthdays in units_employee_birthdays
         if (employee_birthdays := filter_employee_birthdays(
             employee_birthdays=unit_employee_birthdays.employee_birthdays,
             employees_blacklist=employees_blacklist,
