@@ -12,6 +12,7 @@ class Config(BaseModel):
     auth_credentials_storage_base_url: HttpUrl
     units_storage_base_url: HttpUrl
     country_code: CountryCode
+    employees_blacklist: set[str]
 
 
 def load_config_from_file(file_path: pathlib.Path) -> Config:
@@ -24,4 +25,5 @@ def load_config_from_file(file_path: pathlib.Path) -> Config:
         ),
         units_storage_base_url=config['api']['units_storage_base_url'],
         country_code=CountryCode(config['country_code']),
+        employees_blacklist=config['employees']['blacklist'],
     )

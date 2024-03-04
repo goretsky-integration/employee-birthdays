@@ -3,3 +3,6 @@ country_code = ""  # e.g. "us"
 [api]
 auth_credentials_storage_base_url = ""
 units_storage_base_url = ""
+
+[employees]
+blacklist = []
