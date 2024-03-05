@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from exceptions import EmployeeBirthdaysParseError
 from models import EmployeeBirthday
 from new_types import HTML
+from parsers.employees import clean_employee_full_name
 
 __all__ = ('parse_employee_birthdays_html',)
 
@@ -24,7 +25,7 @@ def parse_employee_birthdays_html(html: HTML) -> list[EmployeeBirthday]:
     for table_row in table_rows:
         full_name, position, age = table_row.find_all('td')
 
-        full_name = full_name.text
+        full_name = clean_employee_full_name(full_name.text)
         position = position.text
         age = age.text
 
