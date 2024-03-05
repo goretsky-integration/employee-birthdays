@@ -1,5 +1,7 @@
 import pathlib
 
+import structlog.stdlib
+
 from config import load_config_from_file
 from context.accounts import (
     get_accounts,
@@ -20,6 +22,9 @@ from http_clients import (
 )
 from message_queue import get_message_queue_channel, send_events
 from models import Event, UnitEmployeeBirthdays
+from telegram import BirthdayNotifier
+
+log = structlog.stdlib.get_logger('app')
 
 
 def main():
@@ -31,6 +36,12 @@ def main():
     account_name_to_unit_ids = group_unit_ids_by_account_name(units)
 
     serializer = EventSerializer(
+        unit_id_to_name={unit.id: unit.name for unit in units},
+    )
+
+    birthday_notifier = BirthdayNotifier(
+        bot_token=config.bot_token.get_secret_value(),
+        chat_id=config.goretsky_band_chat_id,
         unit_id_to_name={unit.id: unit.name for unit in units},
     )
 
@@ -74,10 +85,20 @@ def main():
     for unit_employee_birthdays in units_employee_birthdays:
         events += serializer.serialize(unit_employee_birthdays)
 
-    with get_message_queue_channel(
-            rabbitmq_url=str(config.message_queue_url),
-    ) as message_queue_channel:
-        send_events(channel=message_queue_channel, events=events)
+    try:
+        with get_message_queue_channel(
+                rabbitmq_url=str(config.message_queue_url),
+        ) as message_queue_channel:
+            send_events(channel=message_queue_channel, events=events)
+    except Exception:
+        log.exception('Failed to send events to the message queue')
+
+    try:
+        birthday_notifier.send_notifications(units_employee_birthdays)
+    except Exception:
+        log.exception(
+            'Failed to send birthday notifications to the Goretsky Band channel'
+        )
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 import pathlib
 import tomllib
 
-from pydantic import BaseModel, HttpUrl, AnyUrl
+from pydantic import BaseModel, HttpUrl, AnyUrl, SecretStr
 
 from enums.country_codes import CountryCode
 
@@ -14,6 +14,8 @@ class Config(BaseModel):
     country_code: CountryCode
     employees_blacklist: set[str]
     message_queue_url: AnyUrl
+    bot_token: SecretStr
+    goretsky_band_chat_id: int
 
 
 def load_config_from_file(file_path: pathlib.Path) -> Config:
@@ -28,4 +30,6 @@ def load_config_from_file(file_path: pathlib.Path) -> Config:
         country_code=CountryCode(config['country_code']),
         employees_blacklist=config['employees']['blacklist'],
         message_queue_url=config['message_queue']['url'],
+        bot_token=config['telegram']['bot_token'],
+        goretsky_band_chat_id=config['telegram']['goretsky_band_chat_id'],
     )
