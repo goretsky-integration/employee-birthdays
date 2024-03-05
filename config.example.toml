@@ -9,3 +9,7 @@ blacklist = []
 
 [message_queue]
 url = "amqp://127.0.0.1:5672"
+
+[telegram]
+bot_token = ""
+goretsky_band_chat_id = 0
