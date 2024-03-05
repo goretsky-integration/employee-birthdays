@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "employee-birthdays"
-version = "1.0.0"
+version = "1.1.0"
 description = "Notifications about employee's birthdays"
 authors = ["Eldos <eldos.baktybekov@gmail.com>"]
 readme = "README.md"
