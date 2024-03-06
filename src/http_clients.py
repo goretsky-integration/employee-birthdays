@@ -21,7 +21,7 @@ def closing_dodo_is_connection_http_client(
 ) -> DodoISConnectionHttpClient:
     base_url = f'https://officemanager.dodopizza.{country_code}'
 
-    with httpx.Client(base_url=base_url, **kwargs) as http_client:
+    with httpx.Client(timeout=30, base_url=base_url, **kwargs) as http_client:
         yield DodoISConnectionHttpClient(http_client)
 
 
@@ -30,5 +30,5 @@ def closing_auth_credentials_storage_connection_http_client(
         base_url: str,
         **kwargs,
 ) -> AuthCredentialsStorageConnectionHttpClient:
-    with httpx.Client(base_url=base_url, **kwargs) as http_client:
+    with httpx.Client(timeout=30, base_url=base_url, **kwargs) as http_client:
         yield AuthCredentialsStorageConnectionHttpClient(http_client)
