@@ -1,77 +1,57 @@
-from collections.abc import Iterable
+import json
 
 import httpx
 import structlog.stdlib
+from structlog.contextvars import bound_contextvars
 
-from models import EmployeeBirthday
-
-__all__ = ('BirthdayNotifier',)
+__all__ = ('TelegramBotApiConnection',)
 
 log = structlog.stdlib.get_logger('app')
 
 
-class BirthdayNotifier:
+class TelegramBotApiConnection:
 
     def __init__(
             self,
             *,
-            chat_id: int,
-            unit_id_to_name: dict[int, str],
-            bot_token: str,
+            token: str,
     ):
-        self.__chat_id = chat_id
-        self.__unit_id_to_name = unit_id_to_name
-        self.__bot_token = bot_token
+        self.__token = token
 
     @property
     def base_url(self) -> str:
-        return f'https://api.telegram.org/bot{self.__bot_token}'
+        return f'https://api.telegram.org/bot{self.__token}'
 
-    def _format_message(
-            self,
-            *,
-            unit_id: int,
-            employee_full_name: str,
-    ) -> str:
-        unit_name = self.__unit_id_to_name[unit_id]
-        return (
-            f'Банда, сегодня свой день рождения празднует'
-            f' {employee_full_name} из пиццерии {unit_name} 🎇🎇🎇\n'
-            'Поздравляем тебя и желаем всего самого наилучшего 🥳'
-        )
+    def send_message(self, *, chat_id: int, text: str) -> None:
+        url = f'{self.base_url}/sendMessage'
+        request_data = {'chat_id': chat_id, 'text': text, 'parse_mode': 'HTML'}
 
-    def _send_notification(
-            self,
-            *,
-            http_client: httpx.Client,
-            unit_id: int,
-            employee_full_name: str,
-    ):
-        response = http_client.post('/sendMessage', json={
-            'chat_id': self.__chat_id,
-            'text': self._format_message(
-                unit_id=unit_id,
-                employee_full_name=employee_full_name,
-            ),
-        })
+        # No need to create connection pool, because we have only one request
+        # to the Telegram Bot API in whole app.
+        response = httpx.post(url=url, json=request_data)
 
-        if response.is_error:
-            log.error(
-                'Failed to send a message to the'
-                ' Goretsky Band channel',
-                response=response.text,
-            )
-        else:
-            log.info('Sent a message to the Goretsky Band channel')
+        with bound_contextvars(
+                request_data=request_data,
+                status=response.status_code,
+        ):
 
-    def send_notifications(
-            self,
-            employee_birthdays: Iterable[EmployeeBirthday],
-    ):
-        with httpx.Client(base_url=self.base_url) as http_client:
-            for employee_birthday in employee_birthdays:
-                self._send_notification(
-                    http_client=http_client,
-                    unit_id=employee_birthday.unit_id,
-                    employee_full_name=employee_birthday.full_name,
+            try:
+                response_data = response.json()
+            except json.JSONDecodeError:
+                log.error(
+                    'Telegram Bot API connection: Failed to decode JSON',
+                    response_text=response.text,
                 )
+                return
+
+            if not response_data.get('ok', False):
+                log.error(
+                    'Telegram Bot API connection: Failed to send message',
+                    response_data=response_data,
+                )
+                return
+
+            log.info(
+                'Telegram Bot API connection: Message sent',
+                response_data=response_data,
+            )
