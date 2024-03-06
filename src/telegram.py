@@ -3,7 +3,7 @@ from collections.abc import Iterable
 import httpx
 import structlog.stdlib
 
-from models import UnitEmployeeBirthdays
+from models import EmployeeBirthday
 
 __all__ = ('BirthdayNotifier',)
 
@@ -66,13 +66,12 @@ class BirthdayNotifier:
 
     def send_notifications(
             self,
-            units_employee_birthdays: Iterable[UnitEmployeeBirthdays],
+            employee_birthdays: Iterable[EmployeeBirthday],
     ):
         with httpx.Client(base_url=self.base_url) as http_client:
-            for unit_employee_birthday in units_employee_birthdays:
-                for employee_birthday in unit_employee_birthday.employee_birthdays:
-                    self._send_notification(
-                        http_client=http_client,
-                        unit_id=unit_employee_birthday.unit_id,
-                        employee_full_name=employee_birthday.full_name,
-                    )
+            for employee_birthday in employee_birthdays:
+                self._send_notification(
+                    http_client=http_client,
+                    unit_id=employee_birthday.unit_id,
+                    employee_full_name=employee_birthday.full_name,
+                )

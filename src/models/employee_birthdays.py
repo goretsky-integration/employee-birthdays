@@ -1,14 +1,10 @@
 from pydantic import BaseModel
 
-__all__ = ('EmployeeBirthday', 'UnitEmployeeBirthdays')
+__all__ = ('EmployeeBirthday',)
 
 
 class EmployeeBirthday(BaseModel):
+    unit_id: int
     full_name: str
     position: str
     age: str
-
-
-class UnitEmployeeBirthdays(BaseModel):
-    unit_id: int
-    employee_birthdays: list[EmployeeBirthday]
