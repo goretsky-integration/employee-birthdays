@@ -68,8 +68,6 @@ CONGRATULATIONS_PHRASES: Final[tuple[str, ...]] = (
     ' ярких моментов и замечательных людей в вашей жизни.',
 )
 
-CONGRATULATIONS_EMOJIS: Final[tuple[str, ...]] = ('🥳', '🎉', '🎊')
-
 
 def render_congratulations(
         *,
@@ -78,16 +76,14 @@ def render_congratulations(
 ) -> str:
     lines = ['<b>Банда, сегодня свой день рождения празднуют:</b>\n']
 
-    emoji = random.choice(CONGRATULATIONS_EMOJIS)
-
     for employee_birthday in employee_birthdays:
         unit_name = unit_id_to_name.get(employee_birthday.unit_id)
         employee_name = employee_birthday.full_name
 
         if unit_name is None:
-            lines.append(f'{emoji} {employee_name}')
+            lines.append(f'🎁 {employee_name}')
         else:
-            lines.append(f'{emoji} {employee_name} из пиццерии {unit_name}')
+            lines.append(f'🎁 {employee_name} из пиццерии {unit_name}')
 
     congratulation_phrase = random.choice(CONGRATULATIONS_PHRASES)
 
