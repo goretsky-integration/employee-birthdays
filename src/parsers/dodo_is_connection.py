@@ -8,7 +8,11 @@ from parsers.employees import clean_employee_full_name
 __all__ = ('parse_employee_birthdays_html',)
 
 
-def parse_employee_birthdays_html(html: HTML) -> list[EmployeeBirthday]:
+def parse_employee_birthdays_html(
+        *,
+        html: HTML,
+        unit_id: int,
+) -> list[EmployeeBirthday]:
     soup = BeautifulSoup(html, 'lxml')
 
     table = soup.find('table')
@@ -34,6 +38,7 @@ def parse_employee_birthdays_html(html: HTML) -> list[EmployeeBirthday]:
 
         employee_birthdays.append(
             EmployeeBirthday(
+                unit_id=unit_id,
                 full_name=full_name,
                 position=position,
                 age=age,
