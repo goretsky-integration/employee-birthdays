@@ -20,7 +20,8 @@ from http_clients import (
     closing_dodo_is_connection_http_client,
 )
 from models import EmployeeBirthday
-from telegram import BirthdayNotifier
+from telegram import TelegramBotApiConnection
+from views import render_congratulations
 
 log = structlog.stdlib.get_logger('app')
 
@@ -29,15 +30,13 @@ def main():
     config_file_path = pathlib.Path(__file__).parent.parent / 'config.toml'
     config = load_config_from_file(config_file_path)
 
+    telegram_bot_api_connection = TelegramBotApiConnection(
+        token=config.bot_token.get_secret_value(),
+    )
+
     units = get_units(base_url=str(config.units_storage_base_url))
 
     account_name_to_unit_ids = group_unit_ids_by_account_name(units)
-
-    birthday_notifier = BirthdayNotifier(
-        bot_token=config.bot_token.get_secret_value(),
-        chat_id=config.goretsky_band_chat_id,
-        unit_id_to_name={unit.id: unit.name for unit in units},
-    )
 
     employee_birthdays: list[EmployeeBirthday] = []
 
@@ -69,17 +68,19 @@ def main():
                 unit_ids=account_name_to_unit_ids[account_cookies.account_name],
             )
 
-    units_employee_birthdays = filter_employee_birthdays_in_blacklist(
+    employee_birthdays = filter_employee_birthdays_in_blacklist(
         employee_birthdays=employee_birthdays,
         employees_blacklist=config.employees_blacklist,
     )
 
-    try:
-        birthday_notifier.send_notifications(units_employee_birthdays)
-    except Exception:
-        log.exception(
-            'Failed to send birthday notifications to the Goretsky Band channel'
-        )
+    congratulations_text = render_congratulations(
+        employee_birthdays=employee_birthdays,
+        unit_id_to_name={unit.id: unit.name for unit in units},
+    )
+    telegram_bot_api_connection.send_message(
+        chat_id=config.goretsky_band_chat_id,
+        text=congratulations_text,
+    )
 
 
 if __name__ == '__main__':
