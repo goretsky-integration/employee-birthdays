@@ -12,7 +12,6 @@ from context.employee_birthdays import (
     filter_units_birthdays_by_employees,
     get_employee_birthdays,
 )
-from context.events import EventSerializer
 from context.units import get_units, group_unit_ids_by_account_name
 from dodo_is_connection import DodoISConnection
 from enums import CountryCode
@@ -20,8 +19,7 @@ from http_clients import (
     closing_auth_credentials_storage_connection_http_client,
     closing_dodo_is_connection_http_client,
 )
-from message_queue import get_message_queue_channel, send_events
-from models import Event, UnitEmployeeBirthdays
+from models import UnitEmployeeBirthdays
 from telegram import BirthdayNotifier
 
 log = structlog.stdlib.get_logger('app')
@@ -34,10 +32,6 @@ def main():
     units = get_units(base_url=str(config.units_storage_base_url))
 
     account_name_to_unit_ids = group_unit_ids_by_account_name(units)
-
-    serializer = EventSerializer(
-        unit_id_to_name={unit.id: unit.name for unit in units},
-    )
 
     birthday_notifier = BirthdayNotifier(
         bot_token=config.bot_token.get_secret_value(),
@@ -79,19 +73,6 @@ def main():
         units_employee_birthdays=units_employee_birthdays,
         employees_blacklist=config.employees_blacklist,
     )
-
-    events: list[Event] = []
-
-    for unit_employee_birthdays in units_employee_birthdays:
-        events += serializer.serialize(unit_employee_birthdays)
-
-    try:
-        with get_message_queue_channel(
-                rabbitmq_url=str(config.message_queue_url),
-        ) as message_queue_channel:
-            send_events(channel=message_queue_channel, events=events)
-    except Exception:
-        log.exception('Failed to send events to the message queue')
 
     try:
         birthday_notifier.send_notifications(units_employee_birthdays)
