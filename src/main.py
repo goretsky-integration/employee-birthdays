@@ -73,6 +73,10 @@ def main():
         employees_blacklist=config.employees_blacklist,
     )
 
+    if not employee_birthdays:
+        log.info('No employee birthdays to congratulate')
+        return
+
     congratulations_text = render_congratulations(
         employee_birthdays=employee_birthdays,
         unit_id_to_name={unit.id: unit.name for unit in units},
