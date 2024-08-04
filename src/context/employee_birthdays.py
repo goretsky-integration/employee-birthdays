@@ -16,15 +16,16 @@ def filter_employee_birthdays_by_full_name(
         employee_birthdays: Iterable[EmployeeBirthday],
         employees_blacklist: Iterable[str],
 ) -> list[EmployeeBirthday]:
-    employees_blacklist = set(employees_blacklist)
+    employees_blacklist = {name.lower() for name in employees_blacklist}
 
     result: list[EmployeeBirthday] = []
 
     for employee_birthday in employee_birthdays:
         for employee_in_blacklist in employees_blacklist:
-            if employee_birthday.full_name in employee_in_blacklist.lower():
-                result.append(employee_birthday)
+            if employee_in_blacklist in employee_birthday.full_name.lower():
                 break
+        else:
+            result.append(employee_birthday)
 
     return result
 
