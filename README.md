@@ -1,5 +1,6 @@
 # 🎂 Employee birthdays service
 
+[![Pytest](https://github.com/goretsky-integration/employee-birthdays/actions/workflows/pytest.yml/badge.svg)](https://github.com/goretsky-integration/employee-birthdays/actions/workflows/pytest.yml)
 [![Pylint](https://github.com/goretsky-integration/employee-birthdays/actions/workflows/pylint.yml/badge.svg)](https://github.com/goretsky-integration/employee-birthdays/actions/workflows/pylint.yml)
 [![Mypy](https://github.com/goretsky-integration/employee-birthdays/actions/workflows/mypy.yml/badge.svg)](https://github.com/goretsky-integration/employee-birthdays/actions/workflows/mypy.yml)
 

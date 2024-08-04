@@ -26,9 +26,10 @@ def test_parse_single_employee_birthday_html():
             $("#employeeBirthdaysCount").text('(1)');
     </script>
     ''')
-    actual = parse_employee_birthdays_html(html)
+    actual = parse_employee_birthdays_html(html=html, unit_id=1)
     expected = [
         EmployeeBirthday(
+            unit_id=1,
             full_name='Волошин Павел',
             position='Работник кухни',
             age='36 лет',
@@ -62,14 +63,16 @@ def test_parse_multiple_employee_birthdays_html():
             $("#employeeBirthdaysCount").text('(2)');
     </script>
     ''')
-    actual = parse_employee_birthdays_html(html)
+    actual = parse_employee_birthdays_html(html=html, unit_id=1)
     expected = [
         EmployeeBirthday(
+            unit_id=1,
             full_name='Волошин Павел',
             position='Работник кухни',
             age='36 лет',
         ),
         EmployeeBirthday(
+            unit_id=1,
             full_name='Иванов Иван',
             position='Менеджер',
             age='40 лет',
@@ -93,7 +96,7 @@ def test_parse_no_employee_birthdays_html():
             $("#employeeBirthdaysCount").text('(0)');
     </script>
     ''')
-    actual = parse_employee_birthdays_html(html)
+    actual = parse_employee_birthdays_html(html=html, unit_id=1)
     expected = []
     assert actual == expected
 
@@ -118,7 +121,7 @@ def test_parse_employee_birthdays_html_with_empty_table_data():
             $("#employeeBirthdaysCount").text('(0)');
     </script>
     ''')
-    actual = parse_employee_birthdays_html(html)
+    actual = parse_employee_birthdays_html(html=html, unit_id=1)
     expected = []
     assert actual == expected
 
@@ -133,7 +136,7 @@ def test_parse_employee_birthdays_html_with_empty_table():
             $("#employeeBirthdaysCount").text('(0)');
     </script>
     ''')
-    actual = parse_employee_birthdays_html(html)
+    actual = parse_employee_birthdays_html(html=html, unit_id=1)
     expected = []
     assert actual == expected
 
@@ -147,7 +150,7 @@ def test_parse_employee_birthdays_html_with_no_table():
     </script>
     ''')
     with pytest.raises(EmployeeBirthdaysParseError) as error:
-        parse_employee_birthdays_html(html)
+        parse_employee_birthdays_html(html=html, unit_id=1)
 
     assert error.value.args[0] == 'Failed to find table with employee birthdays'
     assert error.value.html == html
