@@ -1,11 +1,11 @@
 # 🎂 Employee birthdays service
 
+[![Pylint](https://github.com/goretsky-integration/employee-birthdays/actions/workflows/pylint.yml/badge.svg)](https://github.com/goretsky-integration/employee-birthdays/actions/workflows/pylint.yml)
+[![Mypy](https://github.com/goretsky-integration/employee-birthdays/actions/workflows/mypy.yml/badge.svg)](https://github.com/goretsky-integration/employee-birthdays/actions/workflows/mypy.yml)
+
 ---
 
-The service parses birthdays of employees from the Dodo IS office manager's account and sends them to:
-
-- The Telegram channel GoretskyBand
-- The task queue of the "notifications-router" service.
+The service parses birthdays of employees from the Dodo IS office manager's account and sends them to the Telegram channel GoretskyBand.
 
 ## Installation
 

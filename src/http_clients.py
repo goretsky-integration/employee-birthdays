@@ -1,4 +1,5 @@
 import contextlib
+from collections.abc import Generator
 
 import httpx
 
@@ -18,7 +19,7 @@ __all__ = (
 def closing_dodo_is_connection_http_client(
         country_code: CountryCode,
         **kwargs,
-) -> DodoISConnectionHttpClient:
+) -> Generator[DodoISConnectionHttpClient, None, None]:
     base_url = f'https://officemanager.dodopizza.{country_code}'
 
     with httpx.Client(timeout=30, base_url=base_url, **kwargs) as http_client:
@@ -29,6 +30,6 @@ def closing_dodo_is_connection_http_client(
 def closing_auth_credentials_storage_connection_http_client(
         base_url: str,
         **kwargs,
-) -> AuthCredentialsStorageConnectionHttpClient:
+) -> Generator[AuthCredentialsStorageConnectionHttpClient, None, None]:
     with httpx.Client(timeout=30, base_url=base_url, **kwargs) as http_client:
         yield AuthCredentialsStorageConnectionHttpClient(http_client)

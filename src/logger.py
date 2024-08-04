@@ -1,7 +1,7 @@
 import json
 import logging.config
 import pathlib
-from typing import Final
+from typing import Any, Final
 
 __all__ = (
     'CONFIG_FILE_PATH',
@@ -22,7 +22,7 @@ def create_logger(name: str) -> logging.Logger:
 
 def load_config_from_file(
         config_file_path: pathlib.Path = CONFIG_FILE_PATH,
-) -> dict:
+) -> dict[str, Any]:
     config_json = config_file_path.read_text(encoding='utf-8')
     return json.loads(config_json)
 

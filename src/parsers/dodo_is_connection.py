@@ -23,7 +23,7 @@ def parse_employee_birthdays_html(
             html=html,
         )
 
-    table_rows = table.find_all('tr')[1:]
+    table_rows = table.find_all('tr')[1:]  # type: ignore
 
     employee_birthdays: list[EmployeeBirthday] = []
     for table_row in table_rows:

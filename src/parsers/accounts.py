@@ -16,11 +16,11 @@ def parse_accounts_response(response: httpx.Response) -> tuple[Account, ...]:
 
     try:
         return type_adapter.validate_python(response_data)
-    except ValidationError:
+    except ValidationError as error:
         raise ResponseDataParseError(
             response_data=response_data,
             type_to_parse=type_adapter
-        )
+        ) from error
 
 
 def filter_office_manager_accounts(

@@ -13,8 +13,8 @@ def parse_account_cookies_response(response: httpx.Response) -> AccountCookies:
 
     try:
         return AccountCookies.model_validate(response_data)
-    except ValidationError:
+    except ValidationError as error:
         raise ResponseDataParseError(
             response_data=response_data,
             type_to_parse=AccountCookies,
-        )
+        ) from error
