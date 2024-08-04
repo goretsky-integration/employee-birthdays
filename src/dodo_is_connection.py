@@ -1,13 +1,11 @@
 from collections.abc import Generator
 
-import structlog.stdlib
-from structlog.contextvars import bound_contextvars
-
+from logger import create_logger
 from new_types import DodoISConnectionHttpClient, HTML
 
 __all__ = ('DodoISConnection',)
 
-log = structlog.stdlib.get_logger('app')
+logger = create_logger('dodo_is_connection')
 
 
 class DodoISConnection:
@@ -31,18 +29,23 @@ class DodoISConnection:
         while True:
             request_query_params = {'page': page, 'unitId': unit_id}
 
-            with bound_contextvars(request_query_params=request_query_params):
-                log.debug('Fetching employee birthdays: sending request')
-                response = self.__http_client.get(
-                    url=url,
-                    params=request_query_params,
-                    cookies=self.__cookies,
-                )
-                log.debug(
-                    'Fetching employee birthdays: received response',
-                    status=response.status_code,
-                )
+            logger.debug(
+                'Fetching employee birthdays: sending request',
+                extra={'params': request_query_params}
+            )
+            response = self.__http_client.get(
+                url=url,
+                params=request_query_params,
+                cookies=self.__cookies,
+            )
+            logger.debug(
+                'Fetching employee birthdays: received response',
+                extra={
+                    'response': response.text,
+                    'status': response.status_code,
+                },
+            )
 
-                yield HTML(response.text)
+            yield HTML(response.text)
 
             page += 1

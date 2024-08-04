@@ -1,7 +1,5 @@
 import pathlib
 
-import structlog.stdlib
-
 from config import load_config_from_file
 from context.accounts import (
     get_accounts,
@@ -9,7 +7,7 @@ from context.accounts import (
     to_account_names,
 )
 from context.employee_birthdays import (
-    filter_employee_birthdays_in_blacklist,
+    filter_employee_birthdays_by_full_name,
     get_employee_birthdays,
 )
 from context.units import get_units, group_unit_ids_by_account_name
@@ -19,11 +17,12 @@ from http_clients import (
     closing_auth_credentials_storage_connection_http_client,
     closing_dodo_is_connection_http_client,
 )
+from logger import create_logger
 from models import EmployeeBirthday
 from telegram import TelegramBotApiConnection
 from views import render_congratulations
 
-log = structlog.stdlib.get_logger('app')
+logger = create_logger('app')
 
 
 def main():
@@ -68,13 +67,13 @@ def main():
                 unit_ids=account_name_to_unit_ids[account_cookies.account_name],
             )
 
-    employee_birthdays = filter_employee_birthdays_in_blacklist(
+    employee_birthdays = filter_employee_birthdays_by_full_name(
         employee_birthdays=employee_birthdays,
         employees_blacklist=config.employees_blacklist,
     )
 
     if not employee_birthdays:
-        log.info('No employee birthdays to congratulate')
+        logger.info('No employee birthdays to congratulate')
         return
 
     congratulations_text = render_congratulations(

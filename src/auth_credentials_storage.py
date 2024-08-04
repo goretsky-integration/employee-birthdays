@@ -1,12 +1,11 @@
 import httpx
-import structlog.stdlib
-from structlog.contextvars import bound_contextvars
 
+from logger import create_logger
 from new_types import AuthCredentialsStorageConnectionHttpClient
 
 __all__ = ('AuthCredentialsStorageConnection',)
 
-log = structlog.stdlib.get_logger('app')
+logger = create_logger('app')
 
 
 class AuthCredentialsStorageConnection:
@@ -20,11 +19,11 @@ class AuthCredentialsStorageConnection:
     def get_accounts(self) -> httpx.Response:
         url = '/accounts/'
 
-        log.debug('Fetching accounts: sending request')
+        logger.debug('Fetching accounts: sending request')
         response = self.__http_client.get(url)
-        log.debug(
+        logger.debug(
             'Fetching accounts: received response',
-            status=response.status_code,
+            extra={'status': response.status_code},
         )
 
         return response
@@ -33,15 +32,14 @@ class AuthCredentialsStorageConnection:
         url = '/auth/cookies/'
         request_query_params = {'account_name': account_name}
 
-        with bound_contextvars(request_query_params=request_query_params):
-            log.debug('Fetching account cookies: sending request')
-            response = self.__http_client.get(
-                url=url,
-                params=request_query_params,
-            )
-            log.debug(
-                'Fetching account cookies: received response',
-                status=response.status_code,
-            )
+        logger.debug('Fetching account cookies: sending request')
+        response = self.__http_client.get(
+            url=url,
+            params=request_query_params,
+        )
+        logger.debug(
+            'Fetching account cookies: received response',
+            extra={'status': response.status_code},
+        )
 
         return response
