@@ -7,21 +7,24 @@ from parsers.dodo_is_connection import parse_employee_birthdays_html
 __all__ = (
     'get_unit_employee_birthdays',
     'get_employee_birthdays',
-    'filter_employee_birthdays_in_blacklist',
+    'filter_employee_birthdays_by_full_name',
 )
 
 
-def filter_employee_birthdays_in_blacklist(
+def filter_employee_birthdays_by_full_name(
         *,
         employee_birthdays: Iterable[EmployeeBirthday],
         employees_blacklist: Iterable[str],
 ) -> list[EmployeeBirthday]:
     employees_blacklist = set(employees_blacklist)
-    return [
-        employee_birthday
-        for employee_birthday in employee_birthdays
-        if employee_birthday.full_name not in employees_blacklist
-    ]
+
+    result: list[EmployeeBirthday] = []
+
+    for employee_birthday in employee_birthdays:
+        for employee_in_blacklist in employees_blacklist:
+            if employee_birthday.full_name in employee_in_blacklist.lower():
+                result.append(employee_birthday)
+                break
 
 
 def get_unit_employee_birthdays(

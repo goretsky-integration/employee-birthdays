@@ -9,7 +9,7 @@ from context.accounts import (
     to_account_names,
 )
 from context.employee_birthdays import (
-    filter_employee_birthdays_in_blacklist,
+    filter_employee_birthdays_by_full_name,
     get_employee_birthdays,
 )
 from context.units import get_units, group_unit_ids_by_account_name
@@ -68,7 +68,7 @@ def main():
                 unit_ids=account_name_to_unit_ids[account_cookies.account_name],
             )
 
-    employee_birthdays = filter_employee_birthdays_in_blacklist(
+    employee_birthdays = filter_employee_birthdays_by_full_name(
         employee_birthdays=employee_birthdays,
         employees_blacklist=config.employees_blacklist,
     )
