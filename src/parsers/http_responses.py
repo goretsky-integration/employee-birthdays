@@ -10,5 +10,5 @@ __all__ = ('try_parse_response_json',)
 def try_parse_response_json(response: httpx.Response) -> dict | list:
     try:
         return response.json()
-    except json.JSONDecodeError:
-        raise HttpResponseJsonParseError(response)
+    except json.JSONDecodeError as error:
+        raise HttpResponseJsonParseError(response) from error
