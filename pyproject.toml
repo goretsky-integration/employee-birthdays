@@ -36,3 +36,16 @@ python_version = "3.11"
 mypy_path = "src"
 explicit_package_bases = true
 check_untyped_defs = true
+
+[tool.coverage.run]
+omit = [
+    "tests/*",
+    "src/main.py",
+    "src/http_clients.py",
+    "src/exceptions/*",
+    "src/models/*",
+    "src/new_types/*",
+    "src/**/__init__.py",
+    "src/enums/*",
+    "src/logger.py",
+]
