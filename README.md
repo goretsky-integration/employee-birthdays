@@ -3,10 +3,11 @@
 [![Pytest](https://github.com/goretsky-integration/employee-birthdays/actions/workflows/pytest.yml/badge.svg)](https://github.com/goretsky-integration/employee-birthdays/actions/workflows/pytest.yml)
 [![Pylint](https://github.com/goretsky-integration/employee-birthdays/actions/workflows/pylint.yml/badge.svg)](https://github.com/goretsky-integration/employee-birthdays/actions/workflows/pylint.yml)
 [![Mypy](https://github.com/goretsky-integration/employee-birthdays/actions/workflows/mypy.yml/badge.svg)](https://github.com/goretsky-integration/employee-birthdays/actions/workflows/mypy.yml)
-
+[![codecov](https://codecov.io/gh/goretsky-integration/employee-birthdays/branch/main/graph/badge.svg?token=0APNzcEF88)](https://codecov.io/gh/goretsky-integration/employee-birthdays)
 ---
 
-The service parses birthdays of employees from the Dodo IS office manager's account and sends them to the Telegram channel GoretskyBand.
+The service parses birthdays of employees from the Dodo IS office manager's account and sends them to the Telegram
+channel GoretskyBand.
 
 ## Installation
 
