@@ -5,10 +5,7 @@
 
 ---
 
-The service parses birthdays of employees from the Dodo IS office manager's account and sends them to:
-
-- The Telegram channel GoretskyBand
-- The task queue of the "notifications-router" service.
+The service parses birthdays of employees from the Dodo IS office manager's account and sends them to the Telegram channel GoretskyBand.
 
 ## Installation
 
