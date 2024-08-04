@@ -1,12 +1,12 @@
 import json
 
 import httpx
-import structlog.stdlib
-from structlog.contextvars import bound_contextvars
+
+from logger import create_logger
 
 __all__ = ('TelegramBotApiConnection',)
 
-log = structlog.stdlib.get_logger('app')
+logger = create_logger('telegram')
 
 
 class TelegramBotApiConnection:
@@ -30,28 +30,23 @@ class TelegramBotApiConnection:
         # to the Telegram Bot API in whole app.
         response = httpx.post(url=url, json=request_data)
 
-        with bound_contextvars(
-                request_data=request_data,
-                status=response.status_code,
-        ):
-
-            try:
-                response_data = response.json()
-            except json.JSONDecodeError:
-                log.error(
-                    'Telegram Bot API connection: Failed to decode JSON',
-                    response_text=response.text,
-                )
-                return
-
-            if not response_data.get('ok', False):
-                log.error(
-                    'Telegram Bot API connection: Failed to send message',
-                    response_data=response_data,
-                )
-                return
-
-            log.info(
-                'Telegram Bot API connection: Message sent',
-                response_data=response_data,
+        try:
+            response_data = response.json()
+        except json.JSONDecodeError:
+            logger.error(
+                'Telegram Bot API connection: Failed to decode JSON',
+                extra={'response_text': response.text},
             )
+            return
+
+        if not response_data.get('ok', False):
+            logger.error(
+                'Telegram Bot API connection: Failed to send message',
+                extra={'response_data': response_data},
+            )
+            return
+
+        logger.info(
+            'Telegram Bot API connection: Message sent',
+            extra={'response_data': response_data},
+        )

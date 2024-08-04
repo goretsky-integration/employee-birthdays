@@ -1,7 +1,5 @@
 import pathlib
 
-import structlog.stdlib
-
 from config import load_config_from_file
 from context.accounts import (
     get_accounts,
@@ -19,11 +17,12 @@ from http_clients import (
     closing_auth_credentials_storage_connection_http_client,
     closing_dodo_is_connection_http_client,
 )
+from logger import create_logger
 from models import EmployeeBirthday
 from telegram import TelegramBotApiConnection
 from views import render_congratulations
 
-log = structlog.stdlib.get_logger('app')
+logger = create_logger('app')
 
 
 def main():
@@ -74,7 +73,7 @@ def main():
     )
 
     if not employee_birthdays:
-        log.info('No employee birthdays to congratulate')
+        logger.info('No employee birthdays to congratulate')
         return
 
     congratulations_text = render_congratulations(

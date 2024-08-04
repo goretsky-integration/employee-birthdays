@@ -26,6 +26,8 @@ def filter_employee_birthdays_by_full_name(
                 result.append(employee_birthday)
                 break
 
+    return result
+
 
 def get_unit_employee_birthdays(
         *,
