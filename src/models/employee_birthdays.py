@@ -1,10 +1,18 @@
-from pydantic import BaseModel
+import datetime
+from typing import Annotated
 
-__all__ = ('EmployeeBirthday',)
+from pydantic import BaseModel, Field
 
 
-class EmployeeBirthday(BaseModel):
-    unit_id: int
-    full_name: str
-    position: str
-    age: str
+__all__ = ("StaffMemberBirthdayItem",)
+
+
+class StaffMemberBirthdayItem(BaseModel):
+    first_name: Annotated[str, Field(validation_alias="firstName")]
+    last_name: Annotated[str, Field(validation_alias="lastName")]
+    date_of_birth: Annotated[datetime.date, Field(validation_alias="dateOfBirth")]
+    unit_name: Annotated[str, Field(validation_alias="unitName")]
+
+    @property
+    def full_name(self) -> str:
+        return f"{self.last_name} {self.first_name}"

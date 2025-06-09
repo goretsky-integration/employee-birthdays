@@ -7,7 +7,7 @@ from exceptions import ResponseDataParseError
 from models import Account
 from parsers.http_responses import try_parse_response_json
 
-__all__ = ('parse_accounts_response', 'filter_office_manager_accounts')
+__all__ = ('parse_accounts_response', 'filter_api_accounts')
 
 
 def parse_accounts_response(response: httpx.Response) -> tuple[Account, ...]:
@@ -23,11 +23,11 @@ def parse_accounts_response(response: httpx.Response) -> tuple[Account, ...]:
         ) from error
 
 
-def filter_office_manager_accounts(
+def filter_api_accounts(
         accounts: Iterable[Account],
 ) -> list[Account]:
     return [
         account
         for account in accounts
-        if account.name.startswith('office_manager')
+        if account.name.startswith('api')
     ]

@@ -2,9 +2,11 @@ import random
 from collections.abc import Iterable
 from typing import Final
 
-from models import EmployeeBirthday
+from models import StaffMemberBirthdayItem
+
 
 __all__ = ('render_congratulations',)
+
 
 CONGRATULATIONS_PHRASES: Final[tuple[str, ...]] = (
     'Поздравляем с важным днем!'
@@ -70,20 +72,15 @@ CONGRATULATIONS_PHRASES: Final[tuple[str, ...]] = (
 
 
 def render_congratulations(
-        *,
-        employee_birthdays: Iterable[EmployeeBirthday],
-        unit_id_to_name: dict[int, str],
+        employee_birthdays: Iterable[StaffMemberBirthdayItem],
 ) -> str:
     lines = ['<b>Банда, сегодня свой день рождения празднуют:</b>\n']
 
     for employee_birthday in employee_birthdays:
-        unit_name = unit_id_to_name.get(employee_birthday.unit_id)
         employee_name = employee_birthday.full_name
+        unit_name = employee_birthday.unit_name
 
-        if unit_name is None:
-            lines.append(f'🎁 {employee_name}')
-        else:
-            lines.append(f'🎁 {employee_name} из пиццерии {unit_name}')
+        lines.append(f'🎁 {employee_name} из пиццерии {unit_name}')
 
     congratulation_phrase = random.choice(CONGRATULATIONS_PHRASES)
 

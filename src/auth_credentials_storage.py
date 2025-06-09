@@ -28,8 +28,8 @@ class AuthCredentialsStorageConnection:
 
         return response
 
-    def get_cookies(self, account_name: str) -> httpx.Response:
-        url = '/auth/cookies/'
+    def get_access_token(self, account_name: str) -> httpx.Response:
+        url = '/auth/token/'
         request_query_params = {'account_name': account_name}
 
         logger.debug('Fetching account cookies: sending request')

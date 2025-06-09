@@ -22,6 +22,6 @@ def group_unit_ids_by_account_name(units: list[Unit]) -> dict[str, set[int]]:
     account_name_to_unit_ids: defaultdict[str, set[int]] = defaultdict(set)
 
     for unit in units:
-        account_name_to_unit_ids[unit.office_manager_account_name].add(unit.id)
+        account_name_to_unit_ids[unit.dodo_is_api_account_name].add(unit.id)
 
     return dict(account_name_to_unit_ids)

@@ -3,11 +3,11 @@ from typing import NewType
 import httpx
 
 __all__ = (
-    'AuthCredentialsStorageConnectionHttpClient',
-    'DodoISConnectionHttpClient',
+    "AuthCredentialsStorageConnectionHttpClient",
+    "DodoIsApiHttpClient",
 )
 
-AuthCredentialsStorageConnectionHttpClient = (
-    NewType('AuthCredentialsStorageConnectionHttpClient', httpx.Client)
+AuthCredentialsStorageConnectionHttpClient = NewType(
+    "AuthCredentialsStorageConnectionHttpClient", httpx.Client
 )
-DodoISConnectionHttpClient = NewType('DodoISConnectionHttpClient', httpx.Client)
+DodoIsApiHttpClient = NewType("DodoIsApiHttpClient", httpx.Client)

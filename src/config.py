@@ -1,18 +1,19 @@
 import pathlib
 import tomllib
+from zoneinfo import ZoneInfo
 
 from pydantic import BaseModel, HttpUrl, SecretStr
 
-from enums.country_codes import CountryCode
 
 __all__ = ('Config', 'load_config_from_file')
 
 
 class Config(BaseModel):
     """Configuration of the application."""
+    timezone: ZoneInfo
     auth_credentials_storage_base_url: HttpUrl
     units_storage_base_url: HttpUrl
-    country_code: CountryCode
+    base_url: str
     employees_blacklist: set[str]
     bot_token: SecretStr
     goretsky_band_chat_id: int
@@ -24,11 +25,12 @@ def load_config_from_file(file_path: pathlib.Path) -> Config:
     config = tomllib.loads(config_text)
 
     return Config(
+        timezone=ZoneInfo(config['timezone']),
         auth_credentials_storage_base_url=(
             config['api']['auth_credentials_storage_base_url']
         ),
         units_storage_base_url=config['api']['units_storage_base_url'],
-        country_code=CountryCode(config['country_code']),
+        base_url=config['api']['base_url'],
         employees_blacklist=config['employees']['blacklist'],
         bot_token=config['telegram']['bot_token'],
         goretsky_band_chat_id=config['telegram']['goretsky_band_chat_id'],
