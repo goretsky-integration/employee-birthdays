@@ -3,6 +3,7 @@ from collections.abc import Iterable
 from typing import Final
 
 from models import StaffMemberBirthdayItem
+from parsers.employees import clean_employee_full_name
 
 
 __all__ = ('render_congratulations',)
@@ -77,7 +78,7 @@ def render_congratulations(
     lines = ['<b>Банда, сегодня свой день рождения празднуют:</b>\n']
 
     for employee_birthday in employee_birthdays:
-        employee_name = employee_birthday.full_name
+        employee_name = clean_employee_full_name(employee_birthday.full_name)
         unit_name = employee_birthday.unit_name
 
         lines.append(f'🎁 {employee_name} из пиццерии {unit_name}')
